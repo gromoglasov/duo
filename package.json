@@ -1,0 +1,21 @@
+{
+  "name": "duo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "kcors": "^2.2.2",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "mongoose": "^5.2.5"
+  },
+  "devDependencies": {
+    "eslint": "^5.2.0",
+    "eslint-plugin-json": "^1.2.0"
+  }
+}
