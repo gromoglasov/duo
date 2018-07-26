@@ -1,28 +1,69 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(17, 33, 61);
 }
 
 .Header {
-  background-color: #222;
-  height: 150px;
+  background-color: darkred;
+  height: 50px;
   padding: 20px;
   color: white;
+  text-align: left;
+}
+
+.Keyboard {
+  height: 202px;
+  border: 1px;
+  border-style: solid;
+  border-color: white;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.WhiteKey {
+  z-index: 0;
+  height: 100%;
+  width: 14.2857142857%;
+  background-color: rgb(106, 116, 171);
+  border: 1px;
+  border-style: solid;
+  border-color: white;
+}
+
+.Octave {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  width: 33.3%;
+  border: 0px;
+  margin: 0px;
+}
+
+.WhiteKey:hover {
+  background-color: grey;
+}
+
+.BlackKey {
+  z-index: 1;
+  width: 6.9%;
+  height: 50%;
+  background-color: black;
+  border: 1px;
+  border-style: solid;
+  border-color: red;
+  margin: 0 -3.5%;
+}
+
+.BlackKey:hover {
+  background-color: darkgrey;
 }
 
 .App-title {
   font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
