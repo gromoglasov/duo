@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tone from 'tone';
-
+import openSocket from 'socket.io-client';
 import './App.css';
 import { connect } from 'react-redux';
 import { playNote, stopNote, moveUp, moveDown } from './redux/actions';
@@ -9,11 +9,12 @@ import Keyboard from './components/keyboard.js';
 import allKeys from './keys/key-values.js';
 class App extends Component {
 
-
   constructor (props) {
     super(props);
     const synth = new Tone.PolySynth(108, Tone.AMSynth).toMaster();
     const allNotes = allKeys;
+    const socket = openSocket('http://localhost:3000');
+    console.log(socket);
     this.state = {
       synth,
       allNotes,
