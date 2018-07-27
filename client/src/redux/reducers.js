@@ -22,17 +22,18 @@ const initialState = {
   userInput: {},
 };
 
-
 const reducer = (state = initialState, action) => {
   let newState;
   let newArr = [...state.activeKeyboardKeys];
   let updatedInput = Object.assign({}, state.userInput);
+
   switch (action.type) {
   case 'PLAY_NOTE':
     if (action.noteKey !== undefined) {
       if (!updatedInput[action.noteKey]) updatedInput[action.noteKey] = [];
       updatedInput[action.noteKey].push(Date.now());
     }
+
     newState = {
       activeKeys: [...state.activeKeys,
         action.noteKey],
@@ -40,14 +41,17 @@ const reducer = (state = initialState, action) => {
       activeKeyboardKeys: state.activeKeyboardKeys,
     };
     return newState;
+
   case 'STOP_NOTE':
     if (action.noteKey !== undefined) updatedInput[action.noteKey].push(Date.now());
+
     newState = {
       activeKeys: stopNote(state.activeKeys, action.noteKey),
       userInput: updatedInput,
-      activeKeyboardKeys: state.activeKeyboardKeys
+      activeKeyboardKeys: state.activeKeyboardKeys,
     };
     return newState;
+
   case 'MOVE_UP':
     for (let i=0; i < action.changeArr.length; i++) {
       newArr.slice();
@@ -56,9 +60,10 @@ const reducer = (state = initialState, action) => {
     newState = {
       activeKeys: [...state.activeKeys],
       userInput: state.userInput,
-      activeKeyboardKeys: newArr
+      activeKeyboardKeys: newArr,
     };
     return newState;
+
   case 'MOVE_DOWN':
     for (let i=0; i < action.changeArr.length; i++) {
       newArr.pop();
@@ -67,7 +72,7 @@ const reducer = (state = initialState, action) => {
     newState = {
       activeKeys: [...state.activeKeys],
       userInput: state.userInput,
-      activeKeyboardKeys: newArr
+      activeKeyboardKeys: newArr,
     };
     return newState;
   default:
@@ -83,5 +88,21 @@ function stopNote (arrayOfNotes, note) {
   }
   return newArrayOfNotes;
 }
+
+// function checkForOngoingNotes (userInput) {
+//   let newInput = {};
+//   let keys = Object.keys(userInput);
+//   for (let i = 0; i < keys.length; i++) {
+//     if (keys[i] == 'startTime') {
+//       newInput.startTime = Date.now();
+//       continue;
+//     }
+//     if (userInput[keys[i]].length % 2 != 0) {
+//       newInput[keys[i]] = userInput[keys[i]].length - 1; //add the last timestamp
+//     }
+//   }
+//   return newInput;
+// }
+
 
 export default reducer;

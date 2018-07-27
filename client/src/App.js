@@ -24,9 +24,9 @@ class App extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (prevProps.userInput !== this.props.userInput) {
-      console.log('CHANGED!');
+      console.log('changed!');
       sendUserInput(this.props.userInput);
     }
   }
@@ -35,10 +35,10 @@ class App extends Component {
     let index = this.props.activeKeys.indexOf(note);
     if (index < 0) {
       this.props.playNote(note);
-      this.state.synth.triggerAttack(note);
+      if (note != 0) this.state.synth.triggerAttack(note);
     } else {
       this.props.stopNote(note);
-      this.state.synth.triggerRelease(note);
+      if (note != 0) this.state.synth.triggerRelease(note);
     }
   }
 
@@ -53,9 +53,9 @@ class App extends Component {
 
   render () {
     // console.log(this.props.activeKeys);
-    console.log(this.props.userInput);
+    // console.log(this.props.lastTwoSeconds);
     return (
-      <div className="App" onKeyPress={(e) => console.log(e)}>
+      <div className="App">
         <Header time={this.state.timestamp}/>
         <Keyboard allNotes={this.state.allNotes} onClick={note => this.toggleSound(note)}/>
       </div>
@@ -66,7 +66,7 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   activeKeys: state.activeKeys,
   activeKeyboardKeys: state.activeKeyboardKeys,
-  userInput: state.userInput
+  userInput: state.userInput,
 });
 
 const mapDispatchToProps = (dispatch) => ({
