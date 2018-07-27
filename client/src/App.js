@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Tone from 'tone';
-import openSocket from 'socket.io-client';
 import './App.css';
 import { connect } from 'react-redux';
 import { playNote, stopNote, moveUp, moveDown } from './redux/actions';
+import { subscribeToTimer } from './socket-api';
 import Header from './components/header.js';
 import Keyboard from './components/keyboard.js';
 import allKeys from './keys/key-values.js';
@@ -13,11 +13,14 @@ class App extends Component {
     super(props);
     const synth = new Tone.PolySynth(108, Tone.AMSynth).toMaster();
     const allNotes = allKeys;
-    const socket = openSocket('http://localhost:3000');
-    console.log(socket);
+    subscribeToTimer((err, timestamp) => this.setState({
+      timestamp
+    }));
+
     this.state = {
       synth,
       allNotes,
+      timestamp: 'no timestamp yet',
     };
   }
 
@@ -44,16 +47,12 @@ class App extends Component {
     });
   }
 
-  // componentWillUnmount () {
-  //   window.document.removeEventListener('keydown', this.mapKeys);
-  // }
-
   render () {
     // console.log(this.props.activeKeys);
     // console.log(this.state);
     return (
       <div className="App" onKeyPress={(e) => console.log(e)}>
-        <Header />
+        <Header time={this.state.timestamp}/>
         <Keyboard allNotes={this.state.allNotes} onClick={note => this.toggleSound(note)}/>
       </div>
     );

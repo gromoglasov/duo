@@ -4,7 +4,7 @@ class Header extends Component {
   render () {
     return (
       <div className="Header">
-        <h1>This is DUO</h1>
+        <h1>This is DUO and the time is: {this.props.time}</h1>
       </div>
     );
   }
