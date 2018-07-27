@@ -7,7 +7,7 @@ const IO = require( 'koa-socket' );
 const io = new IO();
 
 require('./db.js');
-
+require('./tensorflow/index.js');
 const PORT = 3000;
 
 app

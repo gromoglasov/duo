@@ -29,8 +29,10 @@ const reducer = (state = initialState, action) => {
   let updatedInput = Object.assign({}, state.userInput);
   switch (action.type) {
   case 'PLAY_NOTE':
-    if (!updatedInput[action.noteKey]) updatedInput[action.noteKey] = [];
-    updatedInput[action.noteKey].push(Date.now());
+    if (action.noteKey !== undefined) {
+      if (!updatedInput[action.noteKey]) updatedInput[action.noteKey] = [];
+      updatedInput[action.noteKey].push(Date.now());
+    }
     newState = {
       activeKeys: [...state.activeKeys,
         action.noteKey],
@@ -39,7 +41,7 @@ const reducer = (state = initialState, action) => {
     };
     return newState;
   case 'STOP_NOTE':
-    updatedInput[action.noteKey].push(Date.now());
+    if (action.noteKey !== undefined) updatedInput[action.noteKey].push(Date.now());
     newState = {
       activeKeys: stopNote(state.activeKeys, action.noteKey),
       userInput: updatedInput,
