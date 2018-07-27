@@ -3,7 +3,7 @@ import Tone from 'tone';
 import './App.css';
 import { connect } from 'react-redux';
 import { playNote, stopNote, moveUp, moveDown } from './redux/actions';
-import { subscribeToTimer } from './socket-api';
+import { subscribeToTimer, sendUserInput } from './socket-api';
 import Header from './components/header.js';
 import Keyboard from './components/keyboard.js';
 import allKeys from './keys/key-values.js';
@@ -24,10 +24,14 @@ class App extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.userInput !== this.props.userInput) {
+      console.log('CHANGED!');
+      sendUserInput(this.props.userInput);
+    }
+  }
+
   toggleSound (note) {
-    // console.log(note);
-    // console.log(this.state.allOscilators);
-    // console.log(this.state.allOscilators[note]);
     let index = this.props.activeKeys.indexOf(note);
     if (index < 0) {
       this.props.playNote(note);
@@ -49,7 +53,7 @@ class App extends Component {
 
   render () {
     // console.log(this.props.activeKeys);
-    // console.log(this.state);
+    console.log(this.props.userInput);
     return (
       <div className="App" onKeyPress={(e) => console.log(e)}>
         <Header time={this.state.timestamp}/>
@@ -61,7 +65,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   activeKeys: state.activeKeys,
-  activeKeyboardKeys: state.activeKeyboardKeys
+  activeKeyboardKeys: state.activeKeyboardKeys,
+  userInput: state.userInput
 });
 
 const mapDispatchToProps = (dispatch) => ({

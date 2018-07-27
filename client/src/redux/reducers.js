@@ -18,23 +18,31 @@ const initialState = {
     76: 587.33,
     80: 622.25,
     186: 659.25,
-    222: 698.46}
+    222: 698.46},
+  userInput: {},
 };
+
 
 const reducer = (state = initialState, action) => {
   let newState;
   let newArr = [...state.activeKeyboardKeys];
+  let updatedInput = Object.assign({}, state.userInput);
   switch (action.type) {
   case 'PLAY_NOTE':
+    if (!updatedInput[action.noteKey]) updatedInput[action.noteKey] = [];
+    updatedInput[action.noteKey].push(Date.now());
     newState = {
       activeKeys: [...state.activeKeys,
         action.noteKey],
+      userInput: updatedInput,
       activeKeyboardKeys: state.activeKeyboardKeys,
     };
     return newState;
   case 'STOP_NOTE':
+    updatedInput[action.noteKey].push(Date.now());
     newState = {
       activeKeys: stopNote(state.activeKeys, action.noteKey),
+      userInput: updatedInput,
       activeKeyboardKeys: state.activeKeyboardKeys
     };
     return newState;
@@ -45,6 +53,7 @@ const reducer = (state = initialState, action) => {
     }
     newState = {
       activeKeys: [...state.activeKeys],
+      userInput: state.userInput,
       activeKeyboardKeys: newArr
     };
     return newState;
@@ -55,6 +64,7 @@ const reducer = (state = initialState, action) => {
     }
     newState = {
       activeKeys: [...state.activeKeys],
+      userInput: state.userInput,
       activeKeyboardKeys: newArr
     };
     return newState;

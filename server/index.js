@@ -23,6 +23,9 @@ app._io.on('connection', (client) => {
       client.emit('timer', new Date());
     }, interval);
   });
+  client.on('userInput', (userInput) => {
+    console.log(userInput);
+  });
 });
 
 app.listen(PORT, function () {

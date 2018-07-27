@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tensorflow/tfjs-node": "^0.1.9",
     "http": "0.0.0",
     "kcors": "^2.2.2",
     "koa": "^2.5.2",

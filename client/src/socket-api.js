@@ -5,4 +5,11 @@ function subscribeToTimer (cb) {
   socket.emit('subscribeToTimer', 1000);
 }
 
-export { subscribeToTimer };
+function sendUserInput (userInput) {
+  socket.emit('userInput', userInput);
+}
+
+export {
+  subscribeToTimer,
+  sendUserInput
+};
