@@ -5,9 +5,10 @@ const cors = require('kcors');
 const app = new Koa();
 const IO = require( 'koa-socket' );
 const io = new IO();
-
 require('./db.js');
 require('./tensorflow/index.js');
+
+const connection = require('./data-handler.js');
 const PORT = 3000;
 
 app
@@ -16,17 +17,7 @@ app
 
 io.attach( app );
 
-app._io.on('connection', (client) => {
-  client.on('subscribeToTimer', (interval) => {
-    console.log('client is subscribing to timer with interval ', interval);
-    setInterval(() => {
-      client.emit('timer', new Date());
-    }, interval);
-  });
-  client.on('userInput', (userInput) => {
-    console.log(userInput);
-  });
-});
+app._io.on('connection', connection.connectUser)
 
 app.listen(PORT, function () {
   console.log(`server listening on ${PORT}`);

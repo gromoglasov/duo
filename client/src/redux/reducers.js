@@ -20,16 +20,18 @@ const initialState = {
     186: 659.25,
     222: 698.46},
   userInput: {},
+  recording: false
 };
 
 const reducer = (state = initialState, action) => {
   let newState;
   let newArr = [...state.activeKeyboardKeys];
   let updatedInput = Object.assign({}, state.userInput);
-
+  let userInputUpdater;
   switch (action.type) {
   case 'PLAY_NOTE':
-    if (action.noteKey !== undefined) {
+
+    if (action.noteKey !== undefined && state.recording) {
       if (!updatedInput[action.noteKey]) updatedInput[action.noteKey] = [];
       updatedInput[action.noteKey].push(Date.now());
     }
@@ -39,16 +41,18 @@ const reducer = (state = initialState, action) => {
         action.noteKey],
       userInput: updatedInput,
       activeKeyboardKeys: state.activeKeyboardKeys,
+      recording: state.recording
     };
     return newState;
 
   case 'STOP_NOTE':
-    if (action.noteKey !== undefined) updatedInput[action.noteKey].push(Date.now());
+    if (action.noteKey !== undefined && state.recording) updatedInput[action.noteKey].push(Date.now());
 
     newState = {
       activeKeys: stopNote(state.activeKeys, action.noteKey),
       userInput: updatedInput,
       activeKeyboardKeys: state.activeKeyboardKeys,
+      recording: state.recording
     };
     return newState;
 
@@ -61,6 +65,7 @@ const reducer = (state = initialState, action) => {
       activeKeys: [...state.activeKeys],
       userInput: state.userInput,
       activeKeyboardKeys: newArr,
+      recording: state.recording
     };
     return newState;
 
@@ -73,7 +78,18 @@ const reducer = (state = initialState, action) => {
       activeKeys: [...state.activeKeys],
       userInput: state.userInput,
       activeKeyboardKeys: newArr,
+      recording: state.recording
     };
+    return newState;
+  case 'RECORD':
+    console.log(state)
+    newState = {
+      activeKeys: [...state.activeKeys],
+      userInput: state.userInput,
+      activeKeyboardKeys: state.activeKeyboardKeys,
+      recording: !state.recording
+    };
+    console.log(newState)
     return newState;
   default:
     return state;
@@ -88,21 +104,5 @@ function stopNote (arrayOfNotes, note) {
   }
   return newArrayOfNotes;
 }
-
-// function checkForOngoingNotes (userInput) {
-//   let newInput = {};
-//   let keys = Object.keys(userInput);
-//   for (let i = 0; i < keys.length; i++) {
-//     if (keys[i] == 'startTime') {
-//       newInput.startTime = Date.now();
-//       continue;
-//     }
-//     if (userInput[keys[i]].length % 2 != 0) {
-//       newInput[keys[i]] = userInput[keys[i]].length - 1; //add the last timestamp
-//     }
-//   }
-//   return newInput;
-// }
-
 
 export default reducer;

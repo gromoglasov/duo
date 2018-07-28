@@ -7,5 +7,11 @@ let chords = scribble.clip({
   pattern: 'x_x_x_x--'.repeat(8),
   sizzle: true
 });
+const converter = {};
 
+converter.convert = () => {
+
+};
+
+module.exports = converter;
 // scribble.midi(chords, './midi-files/chords2.mid');
