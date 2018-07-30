@@ -16,9 +16,12 @@
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-socket": "^4.4.0",
+    "midi-file-parser": "^1.0.0",
+    "midiconvert": "^0.4.7",
     "mongoose": "^5.2.5",
     "scribbletune": "^1.0.0-alpha.6",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "tone": "^0.12.80"
   },
   "devDependencies": {
     "eslint": "^5.2.0",

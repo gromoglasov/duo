@@ -13,8 +13,8 @@ exports.connectUser = (client) => {
   });
   client.on('userInput', (userInput) => {
     allUserInput = userInput;
-    console.log(allUserInput);
-    console.log(converter.convert);
+    // console.log(allUserInput);
+    converter.convert(userInput);
     // console.log(allUserInput);
     // let interval = dataCutter(allUserInput);
     // if (interval) console.log(interval);
