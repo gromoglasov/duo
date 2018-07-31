@@ -7,9 +7,6 @@ import { subscribeToTimer, sendUserInput } from './socket-api';
 import Header from './components/header.js';
 import Keyboard from './components/keyboard.js';
 import allKeys from './keys/key-values.js';
-
-const MidiConvert = require('midiconvert');
-
 class App extends Component {
 
   constructor (props) {
@@ -33,22 +30,6 @@ class App extends Component {
     //   console.log('changed!');
     //   sendUserInput(this.props.userInput);
     // }
-  }
-
-
-  createMidi () {
-    let midi = MidiConvert.create();
-    // add a track
-    midi.track()
-    // select an instrument by its MIDI patch number
-      .patch(32)
-    // chain note events: note, time, duration
-      .note(60, 0, 2)
-      .note(63, 1, 2)
-      .note(60, 2, 2);
-
-    console.log(midi);
-
   }
 
   record () {

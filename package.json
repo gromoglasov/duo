@@ -19,6 +19,7 @@
     "midi-file-parser": "^1.0.0",
     "midiconvert": "^0.4.7",
     "mongoose": "^5.2.5",
+    "numjs": "^0.16.0",
     "scribbletune": "^1.0.0-alpha.6",
     "socket.io": "^2.1.1",
     "tone": "^0.12.80"
