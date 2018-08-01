@@ -4,39 +4,52 @@ const MidiConvert = require('midiconvert');
 const numjs = require('numjs');
 require('@tensorflow/tfjs-node');  // Use '@tensorflow/tfjs-node-gpu' if running with GPU.
 const noteData = require('./midi-to-frequency.js').data;
-let allData;
 const model = tf.sequential();
+const promisify = require('util').promisify;
+const readdir = promisify(fs.readdir);
+const readfile = promisify(fs.readFile);
 
-function dataOrganiser () {
-
+async function dataOrganiser () {
   let sampleMidi;
-  let path = 'trial.mid'
-  fs.readFile(`/Users/vovafiles/Desktop/duoTraining/${path}`, 'binary', function (err, midiBlob) {
-    if (!err) {
-      sampleMidi = MidiConvert.parse(midiBlob);
-    }
-    console.log(noteData);
-    allData = dataCleaner(sampleMidi.tracks[0].notes);
-    console.log(allData);
-    createModel(allData);
-    // compileModel(0.01);
-  });
-  // return myData;
+  let fileNumber;
+  const allSongData = [];
+
+  const files = await readdir('/Users/vovafiles/Git/Codeworks/senior/duo/server/tensorflow/dataset');
+
+  for (let i = 1; i < files.length; i++) {
+    await readfile(`/Users/vovafiles/Git/Codeworks/senior/duo/server/tensorflow/dataset/${files[i]}`, 'binary')
+      .then(midiBlob => {
+        sampleMidi = MidiConvert.parse(midiBlob);
+        allSongData.push([...dataCleaner(sampleMidi.tracks[0].notes)]);
+      });
+  }
+  return allSongData;
+}
+
+
+async function start () {
+  const data = await dataOrganiser();
+  console.log(data);
+  createModel(data);
 }
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-function dataCleaner (allNotes) { //return an array freq, time, duration, velocity
-  let allNotesFromTrack = allNotes;
-  let cleanedArray = [];
-  for (let i = 0; i < allNotesFromTrack.length; i++) {
-    let oneNoteData = [];
-    for (let key in allNotesFromTrack[i]) {
-      if (key == 'midi') oneNoteData.push(noteData[allNotesFromTrack[i][key]-12][allNotesFromTrack[i][key]]);
-      else oneNoteData.push(allNotesFromTrack[i][key]);
+let counter = 0;
+function dataCleaner (allNotes) {
+  //return an array freq, time, duration, velocity
+  if (allNotes.length !== 0) {
+    let cleanedArray = [];
+    for (let i = 0; i < allNotes.length; i++) {
+      let oneNoteData = [];
+      for (let key in allNotes[i]) {
+        // if (!noteData[allNotes[i].midi-12]) continue;
+        if (key == 'midi') oneNoteData.push(noteData[allNotes[i][key]-12][allNotes[i][key]]);
+        else oneNoteData.push(allNotes[i][key]);
+      }
+      cleanedArray.push(oneNoteData);
     }
-    cleanedArray.push(oneNoteData);
-  }
-  return cleanedArray;
+    return cleanedArray;
+  } return [];
 }
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +64,7 @@ function createModel (data) {
   model.compile({optimizer: 'rmsprop', loss: 'categoricalCrossentropy'});
   console.log('model compiled');
   model.summary();
-
+  // console.log(data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +78,7 @@ async function fitModel (numEpochs = 128, examplesPerEpoch = 512, batchSize = 51
   const batchesPerEpoch = examplesPerEpoch / batchSize;
   const totalBatches = numEpochs * batchesPerEpoch;
 
-  onTrainBegin();
+
   await tf.nextFrame();
 
   let t = new Date().getTime();
@@ -107,7 +120,7 @@ function generateMusic () {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-dataOrganiser();
+start();
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////HELPERS/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
